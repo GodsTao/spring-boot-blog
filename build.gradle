@@ -1,0 +1,35 @@
+plugins {
+    id 'org.springframework.boot' version '2.0.3.RELEASE'
+    id 'java'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.juntao'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+    maven{url "https://repo.spring.io/milestone"}
+    maven {url "http://maven.aliyun.com/nexus/content/groups/public"}
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    runtimeOnly 'com.h2database:h2'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.47'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compile('org.apache.tomcat.embed:tomcat-embed-jasper')
+    compile('org.springframework.boot:spring-boot-starter-tomcat')
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+    compile ('org.springframework.boot:spring-boot-starter-security')
+    compile ('org.thymeleaf.extras:thymeleaf-extras-springsecurity4:3.0.2.RELEASE')
+    compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.0.0.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.0.0.RELEASE'
+    compile('es.nitaur.markdown:txtmark:0.16')
+}
