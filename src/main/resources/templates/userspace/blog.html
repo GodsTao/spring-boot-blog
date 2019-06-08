@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--CSRF-->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <!--default header name is X-CSRF-TOKEN-->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>博客</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/blog.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/tether.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery.tagsinput.min.css}">
+    <link rel="stylesheet" th:href="@{/css/toastr.css}">
+    <link  rel="stylesheet" th:href="@{/css/thinker-md.vendor.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/nature.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/object.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/people.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/place.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/Sysmbols.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/twemoji.css}">
+</head>
+<body>
+    <div th:replace="head ::header"></div>
+    <div class="container blog-content-container">
+        <div class="row">
+            <div class="col-md-8 col-xl-9">
+                <div class="card mb-4">
+                    <div class="card-block">
+                        <h2 class="card-title">
+                            <span><a href="/u" title="" th:href="'/u/'+${blogModel.user.username}" th:title="${blogModel.user.username}">
+                                <img src="/images/avatar-default.jpg" th:src="${blogModel.user.avatar}==null ? '/images/avatar-default.jpg' :
+                                ${blogModel.user.avatar}" class="blog-avatar-50">
+                            </a></span>
+                            <a class="card-link blog-title" title="juntao" th:href="'/u/'+${blogModel.user.username}+'/blogs/edit'+${blogModel.id}"
+                                       th:title="${blogModel.user.username}" th:text="${blogModel.title}"></a>
+                        </h2>
+                        <div class="card-text">
+                            <a href="/u" th:href="'/u/'+${blogModel.user.username}" class="card-link blog-author" th:text="${blogModel.user.username}"></a>
+                            发表于<span class="blog-number">[[${#dates.format(blogModel.createTime,'yyyy-MM-dd HH:mm')}]]</span>
+                            <i class="fa fa-eye pl-2" aria-hidden="true"><span class="blog-number">[[${blogModel.readSize}]]</span></i>
+                            <i class="fa fa-heart-o pl-2" style="color: #e885c0" aria-hidden="true"><span class="blog-number">[[${blogModel.voteSize}]]</span></i>
+                            <i class="fa fa-comment-o pl-2" aria-hidden="true"><span class="blog-number">[[${blogModel.commentSize}]]</span></i>
+                            <a th:if="${isBlogOwner}" th:href="'/u/'+${blogModel.user.username}+'/blogs/edit/'+${blogModel.id}"
+                               class="btn btn-primary float-right" >编辑</a>
+                            <a href="javascript:void(0)" th:if="${isBlogOwner}" class="btn btn-primary float-right blog-delete-blog">删除</a>
+                        </div>
+                        <hr>
+                        <article class="post-content" th:utext="${blogModel.htmlContent}"></article>
+                        <hr>
+                    </div>
+                    <div class="card-block">
+                        <h5 id="tags">标签:
+                            <a th:each="tag :${#strings.arraySplit(blogModel.tags,',')}"
+                               th:href="'/u/'+${blogModel.user.username}+'/blogs?keyword='+${tag}">
+                                <span class="badge badge-default" th:text="${tag}">Spring Boot</span>
+                            </a>
+                        </h5>
+                        <h5>分类：<a th:if="${blogModel.catalog!=null }"  th:href="'/u/'+${blogModel.user.username}+'/blogs?catalog='+${blogModel.catalog.id}"
+                                          th:text="${blogModel.catalog.name}">Spring boot</a>
+                        </h5>
+                    </div>
+                    <!--评论发表框-->
+                    <div class="card-block">
+                        <h5>评论：</h5>
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <textarea class="blog-textarea blog-md-textarea" placeholder="填写评论，不得多于500字" id="commentContent"></textarea>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary float-right" id="submitComment">发表评论</button>
+                        <button class="btn btn-secondary float-right" id="submitVote" th:if="${currentVote ==null}"><i class="fa fa-thumbs-up"></i>点赞 </button>
+                        <button class="btn btn-danger float-right" th:if="${currentVote!=null}" th:attr="voteId=${currentVote.id}" id="cancelVote"><i class="fa fa-heart"></i>取消</button>
+                    </div>
+
+                    <!--评论列表-->
+                    <div class="card-block" id="mainContainer">
+                        <div class="row" id="mainContainerRepleace" th:each="comment,commentStat : ${comments}" th:object="${comment}">
+                            <h2 class="card-title col-lg-1 col-md-2">
+                                <span><a href="/u/juntao" th:href="'/u/'+ *{user.username}" th:title="*{user.username}">
+                                    <img th:src="*{user.avatar}==null ? '/images/avatar-default.jpg': *{user.avatar}" class="blog-avatar-50">
+                                </a></span>
+                            </h2>
+                            <div class="card-text col-lg-11 col-md-10">
+                                <a href="/u/juntao" th:href="'/u/'+ *{user.username}" class="card-link" th:text="*{user.username}"></a>
+                                [[${commentStat.index}+1]]楼
+                                [[${#dates.format(comment.createTime,'yyyy-MM-dd :HH:mm')}]]
+                                <a href="javascript:void(0)" class="blog-delete-comment" th:if="${commentOwner} eq *{user.username}"
+                                th:attr="commentId=*{id}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                <p th:text="*{content}"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--右侧栏目-->
+            <div class="col-md-4 col-xl-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-text"><span class="fa fa-bars"></span>文章目录</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div id="catalog" class="col-lg-12">
+                                <ol>
+                                    <p class="card-text">索引分片分配</p>
+                                    <p class="card-text">分片分配过滤</p>
+                                    <p class="card-text">节点离开时延迟分配</p>
+                                    <p class="card-text">取消分片迁移</p>
+                                    <p class="card-text">永久删除节点</p>
+                                    <p class="card-text">索引还原优先级</p>
+                                    <p class="card-text">每个节点的分片总数</p>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="foot :: footer"></div>
+    <!--Javascript-->
+    <script th:inline="javascript">
+        var blogId =[[${blogModel.id}]];
+        var blogUrl ='/u/' +[[${blogModel.user.username}]]+'/blogs/'+[[${blogModel.id}]];
+    </script>
+    <script src="../../js/userspace/blog.js" th:src="@{/js/userspace/blog.js}"></script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>分页器</title>
+</head>
+<body>
+    <!--页数大于0显示-->
+    <nav th:fragment="page" data-th-if="${page.totalPages gt 0}" data-th-object="${page}">
+        <ul  class="pagination justify-content-center mb-4" >
+            <li class="tbpage-total-elements disabled ">共[[${page.totalElements}]]条</li>
+            <!--上一页-->
+            <li class="page-item" th:classappend="*{first}? 'disabled' : ''">
+                <!--定义为javascript.void(0)一个死链接-->
+                <a href="javascript.void(0)" class="page-link" data-th-attr="pageIndex=${page.number} - 1" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <!--迭代生成页码-->
+            <li class="page-item" data-th-each="i" th:each="i : ${#numbers.sequence(1,page.totalPages)}" data-th-classappend="${(page.number + 1) eq i} ? 'active' : ''">
+                <a class="page-link tbpage-item" data-th-attr="pageIndex=${i} - 1" href="javascript:void(0);">
+                    <span data-th-text="${i}"></span>
+                </a>
+            </li>
+            <!--下一页-->
+            <li class="page-item" th:classappend="*{last}? 'disabled' : ''" >
+                <a href="javascript.void(0)" class="page-link"  data-th-attr="pageIndex=${page.number} + 1" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</body>
+</html>

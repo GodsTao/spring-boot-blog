@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <!--CSRF-->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <!--default header name is X-CSRF-TOKEN-->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>博客编辑</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/blog.css}">
+    <link rel="stylesheet" th:href="@{/css/jquery.tagsinput.min.css}">
+    <link rel="stylesheet" th:href="@{/css/tether.css}">
+    <link rel="stylesheet" th:href="@{/css/toastr.css}">
+    <link rel="stylesheet" th:href="@{/css/cropbox.css}">
+    <link  rel="stylesheet" th:href="@{/css/thinker-md.vendor.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/nature.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/object.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/people.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/place.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/Sysmbols.css}">
+    <link rel="stylesheet" th:href="@{/css/emoji/twemoji.css}">
+</head>
+</head>
+<body>
+
+    <div th:replace="head :: header"></div>
+    <div class="container blog-content-container">
+        <div class="row">
+            <div class="col-md-8 col-xl-8">
+                <!--Blog Post-->
+                <div class="card-body" th:object="${blogModel.blog}">
+                    <input type="hidden" name="id" id="blogId" th:value="*{id}">
+                    <input  class="form-control" placeholder="请填写博客标题" id="title" name="title" th:value="*{title}" maxlength="50">
+                    <textarea class="blog-textarea" placeholder="请填写博客摘要" id="summary" name="summary" th:text="*{summary}" maxlength="300"></textarea>
+                    <hr>
+                    <textarea class="blog-lg-textarea" id="md" data-provide="markdown" data-hidden-buttons="cmdImage" name="content" th:text="*{content}"></textarea>
+                    <hr>
+                </div>
+            </div>
+
+            <!--右侧栏目-->
+            <div class="col-md-4 col-xl-4">
+                <!--图片上传-->
+                <div class="card">
+                    <h5 class="card-header">
+                        <i class="fa fa-file-image-o" aria-hidden="true"></i> 图片上传
+                    </h5>
+                    <div class="card-body">
+                        <div class="row mt-1">
+                            <div class="col-lg-12">
+                                <form enctype="multipart/form-data"  id="uploadformid">
+                                    <input type="file" name="file" accept="image/jpeg,image/png,image/gif" id="file">
+                                    <button class="btn btn-primary float-right" id="uploadImage" type="button">插入</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 文章设置 -->
+                <div class="card ">
+                    <h5 class="card-header"><i class="fa fa-cog" aria-hidden="true"></i> 博客设置</h5>
+                    <div class="card-body">
+                        <div class="row mt-1">
+                            <div  class="col-lg-12">
+                                标签： 				<input type="text" class="form-control form-control-tag"
+                                                    th:value="${blogModel.blog.tags}">
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div  class="col-lg-12">
+                                分类：					<select id="catalogSelect" class="form-control form-control-chosen"
+                                                               data-placeholder="请选择">
+                                <option value="0">请选择</option>
+                                <option th:value="*{id}" th:text="*{name}"
+                                        th:each="catalog :${blogModel.catalogs}"
+                                        th:object="${catalog}"
+                                        th:selected="${catalog eq blogModel.blog.catalog}">Java</option>
+                            </select>
+                            </div>
+                        </div>
+                        <div class="row mt-1">
+                            <div  class="col-lg-12">
+                                <button class="btn btn-primary float-right" id="submitBlog"
+                                        th:attr="username=${#authentication.principal.username}">发布</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div th:replace="foot:: footer"></div>
+
+    <!--Javascript-->
+    <script th:inline="javascript">
+        var fileServerUrl = [[${blogModel.fileServerUrl}]];
+    </script>
+    <script th:src="@{/js/userspace/blogedit.js}"></script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container">
+        <form th:action="@{~/login}" method="post" id="loginForm">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text fa fa-user"></span>
+                    </div>
+                    <input type="text" class="form-control" id="username" name="username"   placeholder="请输入账号">
+                    <span class="invalid-feedback" style="display: none" id="username-errorText"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text fa fa-lock"></span>
+                    </div>
+                    <input type="password" class="form-control" id="password"  name="password" placeholder="请输入密码">
+                    <span class="invalid-feedback" style="display: none" id="password-errorText"></span>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" value="juntao.com">记住我
+            </div>
+            <div class="form-group">
+                <button  class="btn btn-primary form-control"  id="submitLogin">登录</button>
+            </div>
+        </form>
+    </div>
+    <div id="otherLogin">
+        <span style="font-size: 12px"> 其他登录方式</span>
+        <div style="display: inline-block">
+            <span>
+                <img class="other-img" th:src="@{/images/qq.png}">
+            </span>
+            <span >
+                <img class="other-img" th:src="@{/images/wechat.png}">
+            </span>
+            <span >
+                <img class="other-img" th:src="@{/images/weibo.png}">
+            </span>
+            <span >
+                <img class="other-img" th:src="@{/images/renren.png}">
+            </span>
+        </div>
+    </div>
+</body>
+</html>

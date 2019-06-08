@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:v-on="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>博客首页</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/blog.css}">
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/tether.css}">
+    <link rel="stylesheet" th:href="@{/css/toastr.css}">
+</head>
+<body>
+<div id="app">
+    <div th:replace="head1 :: header1"></div>
+    <div class="container blog-content-container">
+        <div class="row">
+            <!--Blog Column-->
+            <div class="col-md-8 col-xl-8">
+                <!--Blog Post-->
+                <div id="mainContainer">
+                    <div class="recommend row">
+                        <div class="col-md-3">
+                            <div class="text-list">
+                                <div class="list-group">
+                                    <a href="#" class="list-group-item list-group-item-action list-group-item-danger">推荐</a>
+                                    <a href="#" class="list-group-item list-group-item-action list-group-item-primary">java</a>
+                                    <a href="#" class="list-group-item list-group-item-action list-group-item-success">后端</a>
+                                    <a href="#" class="list-group-item list-group-item-action list-group-item-warning">前端</a>
+                                    <a href="#" class="list-group-item list-group-item-action list-group-item-info">移动端</a>
+                                    <a href="#" class="list-group-item list-group-item-action list-group-item-light">其它</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-9" style="padding-left: 0">
+                            <div class="slide">
+                                <div class="img-list">
+                                    <img th:src="@{/images/1.png}" alt="图1">
+                                    <img th:src="@{/images/2.png}" alt="图2">
+                                    <img th:src="@{/images/3.png}" alt="图3">
+                                    <img th:src="@{/images/4.jpg}" alt="图4">
+                                    <img th:src="@{/images/5.png}" alt="图5">
+                                </div>
+                                <div class="pointer">
+                                    <span class="selected" th:attr="index=1"></span>
+                                    <span th:attr="index=2"></span>
+                                    <span th:attr="index=3"></span>
+                                    <span th:attr="index=4"></span>
+                                    <span th:attr="index=5"></span>
+                                </div>
+                                <a class="arrows left"  href="javascript:void(0)"><span class="fa fa-angle-left"></span></a>
+                                <a class="arrows right" href="javascript:void(0)"><span class="fa fa-angle-right"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="mainContainerRepleace">
+                        <div id="reload" v-if="showReload"><a  href="javascript:void(0)"  v-on:click="reload()">恢复删除的博客</a></div>
+                        <bloglist :blog="item" :index="index" v-for="(item,index) in info.list" v-on:deleteitem="deleteitem(item,index)"></bloglist>
+                        <div th:replace="page1 :: page1"></div>
+                        <nav v-else>
+                            <ul  class="pagination justify-content-center mb-4" >
+                                <li class="tbpage-total-elements disabled" style="font-size: 2em;color:#999">此搜索没有结果</li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+
+            <!--右侧栏目-->
+            <div class="col-md-4 col-xl-4">
+                <!--热门标签-->
+                <div class="card">
+                    <h5 class="card-header"><i class="fa fa-tags" aria-hidden="true"></i> 热门标签</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a  th:each="tag,tagStat : ${model.tags}" th:object="${tag}" href="/blog?keyword=1"
+                                   th:href="'/blogs?keyword='+ *{name}">
+                                    <span class="badge bad"  th:classappend="${tagStat.index} eq 0
+                                    ? 'badge-danger':(${tagStat.index} eq 1
+                                    ? 'badge-warning':(${tagStat.index} eq 2
+                                    ?'badge-info':(${tagStat.index} eq 3
+                                    ?'badge-success' :'badge-default')))" th:text="*{name}"></span>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <!--热门用户-->
+                <div class="card my-4">
+                    <h5 class="card-header"><i class="fa fa-user" aria-hidden="true"></i> 热门用户</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <span th:each="user :${model.users}" th:object="${user}">
+                                    <a href="/u/lijuntao" th:href="'/u/'+ *{username}" th:title="*{username}">
+                                        <img class="blog-avatar-50" src="/images/avatar-default.jpg"
+                                             th:src="*{avatar}==null? '/images/avatar-default.jpg': *{avatar}">
+                                    </a>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--热门文章-->
+                <div class="card my-4">
+                    <h5 class="card-header"><i class="fa fa-newspaper-o" aria-hidden="true"></i> 热门文章</h5>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <ul class="list-group" th:each="hotblog,hotblogStat : ${model.hotest}" th:object="${hotblog}">
+                                    <a class="list-group-item hot-title" th:href="'/u/'+ *{username}+'/blogs/'+ *{blogId}">
+                                        [[*{title}]]<span class="badge badge-pill" th:classappend="${hotblogStat.index} eq 0
+                                        ?'badge-danger': (${hotblogStat.index} eq 1
+                                        ?'badge-warning':(${hotblogStat.index} eq 2
+                                        ?'badge-info':(${hotblogStat.index} eq 3
+                                        ?'badge-success': 'badge-default')))">[[*{readSize}]]</span>
+                                    </a>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--最新发布-->
+                <div class="card my-4">
+                    <h5 class="card-header"><i class="fa fa-line-chart" aria-hidden="true"></i> 最新发布</h5>
+                    <ul class="list-group" th:each="newblog : ${model.newest}" th:object="${newblog}">
+                        <a class="list-group-item" th:href="'/u/'+ *{username}+'/blogs/'+ *{blogId}"
+                            th:text="*{title}"></a>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <div th:replace="foot :: footer"></div>
+    <!--Javascript-->
+    <script href="../js/index.js" th:src="@{/js/index.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <script  type="text/javascript" th:inline="javascript">
+        //<![CDATA[
+        const bloglist= Vue.extend({
+            props: ['blog','index'],
+            template: "                   <div class=\"card mb-4 blogs\" @mouseover='showDelete()' @mouseleave='hideDelete()'>\n" +
+                "                            <div class=\"card-body\">\n" +
+                "                                <h2 class=\"card-title\">\n" +
+                "                                    <a  :href=\"'/u/'+blog.username\" :title=\"blog.username\">\n" +
+                "                                        <img  :src=\"blog.avatar\"\n" +
+                "                                             class=\"blog-avatar-50\">\n" +
+                "                                    </a>\n" +
+                "                                    <a class=\"card-link blog-title\"  :href=\"'/u/'+blog.username+'/blogs/'+blog.blogId\"\n" +
+                "                                       :title=\"blog.title\" >{{blog.title}}</a>\n" +
+                "                                    <a id=\"delete-item\" href=\"javascript:void(0)\" @click='deleteitem(blog)' ref='remove'><span class=\"fa fa-times\" ></span></a>\n" +
+                "                                </h2>\n" +
+                "                                <p class=\"card-text blog-font\" >{{blog.summary}}</p>\n" +
+                "                                <div class=\"card-text blog-font\">\n" +
+                "                                    <a class=\"card-link blog-author\"  :href=\"'/u/'+blog.username\">{{blog.username}}</a>\n" +
+                "                                    发表时间：<span class=\"blog-number\">{{blog.createTime}}</span>\n" +
+                "                                    <span style=\"float: right;display: inline-block\">\n" +
+                "                                        <span class=\"fa fa-eye\" aria-hidden=\"true\" >\n" +
+                "                                            <i class=\"blog-number\">{{blog.readSize}}</i></span>\n" +
+                "                                        <span class=\"fa fa-heart-o\" aria-hidden=\"true\" style=\"color: #e885c0; padding-left:20px \">\n" +
+                "                                            <i class=\"blog-number\">{{blog.voteSize}}</i></span>\n" +
+                "                                         <span class=\"fa fa-comment-o\" aria-hidden=\"true\" style=\"padding-left: 20px\">\n" +
+                "                                            <i class=\"blog-number\">{{blog.commentSize}}</i></span>\n" +
+                "                                    </span>\n" +
+                "                                </div>\n" +
+                "                            </div>\n" +
+                "                        </div>",
+            methods: {
+                deleteitem: function (blog) {
+                    this.$emit("deleteitem", blog);
+                },
+                showDelete:function() {
+                    this.$refs.remove.style.display = "inline-block";
+                },
+                hideDelete:function () {
+                    this.$refs.remove.style.display = "none";
+                },
+            }
+
+        });
+        var app = new Vue ({
+            el: '#app',
+            data(){
+                return {
+                    info:{
+                        list: [],
+                        page:{},
+                        pageArray:[]
+                    },
+                    items:[],
+                    showReload:false,
+                    index: 0,
+                    size: 5,
+                    keyword:null,
+                    order: "new"
+                }
+            },
+            created(){
+                this.info.list = [[${blogList}]];
+                this.info.page =[[${page}]];
+                let total=this.info.page.totalPages;
+                for (let i=0;i< total;i++){
+                    this.info.pageArray.push(i);
+                }
+            },
+            methods: {
+                //从博客列表中删除一个
+                deleteitem:function (blog,index) {
+                     this.items.push(blog);
+                     this.info.list.splice(index,1);
+                     this.showReload=true;
+                },
+                //重新加载被删除的博客
+                reload:function () {
+                    for (let blog of this.items) {
+                        this.info.list.push(blog);
+                    }
+                    this.items =[];
+                    this.showReload=false;
+                },
+                //异步请求博客数据
+                ajaxOperation: function(key) {
+                    axios.get('blogs/getBlogs',{params: {pageIndex: this.index,pageSize: this.size,keyword: key,order:this.order}})
+                        .then(response => {
+                            this.info= response.data;
+                        });
+                    this.items =[];
+                    this.showReload=false;
+                },
+                //页面切换
+                pageChange: function(e) {
+                    this.index =e.target.getAttribute("pageIndex");
+                    this.ajaxOperation(this.keyword);
+                },
+                //动态修改页码的class，设置高亮
+                setActive: function(index) {
+                    if(this.index==index){
+                        return "page-item active";
+                    }else {
+                        return "page-item";
+                    }
+                },
+                //点击下一页
+                nextPage: function() {
+                    this.index+=1;
+                    this.ajaxOperation(this.keyword);
+
+                },
+                //点击上一页
+                previousPage: function() {
+                    this.index-=1;
+                    this.ajaxOperation(this.keyword);
+                },
+                //完成搜索
+                search: function() {
+                    this.ajaxOperation(this.keyword);
+                },
+                selectHot:function () {
+                    this.order = "hot";
+                    this.ajaxOperation(this.keyword);
+                    this.keyword = "";
+                },
+                selectNew:function() {
+                    this.order = "new";
+                    this.ajaxOperation(this.keyword);
+                    this.keyword = "";
+                }
+            },
+            components: {
+                "bloglist":bloglist
+            }
+        });
+       // ]]>
+    </script>
+</body>
+</html>

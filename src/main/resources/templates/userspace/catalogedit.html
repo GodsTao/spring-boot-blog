@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="container" th:object="${catalog}">
+        <form id="catalogForm">
+            <input type="hidden" name="id" th:value="*{id}" id="catalogId">
+            <div class="form-group">
+                <label for="catalogName" class="col-form-label">名称</label>
+                <input class="form-control" name="name" id="catalogName" type="text"
+                       th:value="*{name}" maxlength="30" placeholder="请输入姓名，至少2个字符，至多30个">
+            </div>
+        </form>
+    </div>
+</body>
+</html>

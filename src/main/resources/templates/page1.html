@@ -1,0 +1,26 @@
+
+<nav th:fragment="page1" v-if="info.page.totalPages > 0" data-th-object="${page}">
+    <ul  class="pagination justify-content-center mb-4" >
+        <li class="tbpage-total-elements disabled" >共{{info.page.totalElements}}条</li>
+        <!--上一页-->
+        <li :class="info.page.first ? 'page-item disabled' : 'page-item'" >
+            <!--定义为javascript.void(0)一个死链接-->
+            <a href="javascript:void(0)" class="page-link" data-th-attr="pageIndex=${page.number} - 1" aria-label="Previous" @click="previousPage()">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <!--迭代生成页码-->
+        <li :class="setActive(index)"   v-for="(item,index) in info.pageArray"  >
+            <a class="page-link tbpage-item" :pageIndex="index" href="javascript:void(0);"   @click="pageChange($event)">
+                {{index+1}}
+            </a>
+        </li>
+        <!--下一页-->
+        <li  :class="info.page.last ? 'page-item disabled' : 'page-item'">
+            <a href="javascript:void(0)" class="page-link"  data-th-attr="pageIndex=${page.number} + 1" aria-label="Next" @click="nextPage()">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+

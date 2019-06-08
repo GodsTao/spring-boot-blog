@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.nrt.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>首部</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/blog.css}">
+    <link rel="stylesheet" th:href="@{/css/tether.css}">
+    <link rel="stylesheet" th:href="@{/css/toastr.css}">
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark  navbar-expand-lg" th:fragment="header1">
+    <div class="container">
+        <a class="navbar-brand" href="/" th:href="@{/}">BingoBlog</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsContainer" aria-controls="navbarsContainer"  aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsContainer">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item"><a class="nav-link" th:href="@{/index}"><span class="fa fa-home"></span>主页 <span class="sr-only">(index)</span></a></li>
+                <li class="nav-item"><a :class="order=='new'? 'nav-link active' : 'nav-link'" href="javascript:void(0)" th:attr="url='/blogs?order=new'" @click="selectNew">
+                    <span class="fa fa-flash"></span>最新<span class="sr-only">(current)</span></a></li>
+                <li class="nav-item"><a :class="order=='hot'? 'nav-link active' : 'nav-link'" href="javascript:void(0)" th:attr="url='/blogs?order=hot'" @click="selectHot">
+                    <span class="fa fa-fire"></span>最热<span class="sr-only">(hot)</span></a></li>
+                <form class="form-inline mt-2 mt-md-0 ml-2" role="search">
+                    <input class="form-control mr-sm-2" id="indexkeyword" type="text"  placeholder="搜索" v-model="keyword" >
+                    <a  class="btn btn-outline-secondary my-2 my-sm-0"  id="indexsearch" href="javascript:void(0)" @click="search()">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </a>
+                </form>
+                <!-- <li  class=" nav-item dropdown ">
+                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                         个人中心<span class="caret"></span>
+                     </a>
+                     <ul class="dropdown-menu">
+                         <li class="dropdown-item"><a href="#">我的博客</a></li>
+                         <li class="dropdown-divider" ></li>
+                         <li class="dropdown-item"><a href="#">个人主页</a></li>
+                     </ul>
+                 </li> -->
+            </ul>
+            <div sec:authorize="isAuthenticated()" class="row">   <!--sec:authorize="isAuthenticated()" 身份经过验证才起作用-->
+                <div class="dropdown nav-item">
+                    <a class="dropdown-toggle nav-link color-white"   href="#" id="navbarDropdown" data-toggle="dropdown" role="button">
+                        <span sec:authentication="name"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/u/juntao" th:href="@{'/u/'+${#authentication.principal.username}+ '/blogs'}">个人主页</a>
+                        <a class="dropdown-item" href="/u/juntao/profile" th:href="@{'/u/'+${#authentication.principal.username}+ '/profile'}" >个人设置</a>
+                    </div>
+                </div>
+                <div class="pr-2">
+                    <a class="btn color-white" href="/u/juntao/blogs/edit" th:href="@{'/u/'+${#authentication.principal.username}+'/blogs/edit'}" >
+                        <span class="fa fa-pencil"></span>写博客
+                    </a>
+                </div>
+                <form action="/logout" th:action="@{/logout}" method="post">
+                    <input class="btn btn-outline-danger" type="submit" value="退出">
+                </form>
+            </div>
+            <div sec:authorize="isAnonymous()">  <!--sec:authorize="isAnonymous()"判断是否为匿名用户，即未经过验证-->
+                <a  href="javascript:void(0)"  id="toLogin"   data-toggle="modal"  data-target="#LRDialog"
+                    class="nav-item  my-2 my-sm-0 p-2" onclick="getLoginPage()">登录</a>
+                <a  href="javascript:void(0)" id="toRegister"   data-toggle="modal"  data-target="#LRDialog"
+                    class="nav-item my-2 my-sm-0 p-2" onclick="getRegisterPage()">注册</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="LRDialog"  tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" >
+                <div class="modal-header" style="border: none">
+                    <div class="modal-title">
+                        <a class="select login-title" href="javascript:void(0)" onclick="getLoginPage()">登录</a>
+                        <a class="select register-title" href="javascript:void(0)" onclick="getRegisterPage()">注册</a></div>
+                    <button type="button" class="close pl-0 ml-0" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="form-container">
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>

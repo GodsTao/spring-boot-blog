@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.nrt.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+>
+<head >
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>登录页面</title>
+    <link rel="stylesheet" th:href="@{css/font-awesome.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/blog.css}">
+
+</head>
+<body>
+    <div th:replace="head :: header"></div>
+    <div class="container blog-content-container">
+        <h3>请登录</h3>
+        <form method="post" th:action="@{~/login}">
+            <div class="form-group col-md-6 col-lg-6 col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text fa fa-user"></span>
+                    </div>
+                    <input type="text" class="form-control" id="username" name="username" maxlength="20"  placeholder="请输入账号" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6 col-lg-6 col-sm-6">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text fa fa-lock"></span>
+                    </div>
+                    <input type="password" class="form-control" id="password"  name="password" maxlength="20" minlength="6" placeholder="请输入密码" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6 col-lg-6 col-sm-6">
+                <input type="checkbox" value="juntao.com">记住我
+            </div>
+            <div class="form-group col-md-6 col-lg-6 col-sm-6">
+                <button type="submit" class="btn btn-primary ">登录</button>
+            </div>
+            <div class="col-md-6 col-lg-6" th:if="${loginError}">
+                <p class="text-danger" th:text="${error}"></p>
+            </div>
+        </form>
+    </div>
+    <div th:replace="foot :: footer"></div>
+    <script th:src="@{/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.js}"></script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <!--CSRF-->
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <!--default header name is X-CSRF-TOKEN-->
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>后台管理</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+    <link rel="stylesheet" th:href="@{/css/blog.css}">
+    <link rel="stylesheet" th:href="@{/css/tether.css}">
+    <link rel="stylesheet" th:href="@{/css/toastr.css}">
+    <link rel="stylesheet" th:href="@{css/font-awesome.css}">
+</head>
+<body>
+    <div th:replace="head :: header"></div>
+    <div class="container blog-content-container">
+        <div class="row">
+            <!--左侧栏目-->
+            <div class="col-md-4 col-lg-4 col-sm-4 col-xl-3">
+                <!--分类菜单-->
+                <div class="card">
+                    <h5 class="card-header">
+                        <i class="fa fa-bars" aria-hidden="true"></i>
+                        菜单
+                    </h5>
+                    <ul class="list-group blog-menu" th:each="menu : ${model.list}">
+                        <a href="javascript:void(0)" class="list-group-item" th:text="${menu.name}" th:attr="url=${menu.url}"></a>
+                    </ul>
+                </div>
+            </div>
+            <!--右侧栏目-->
+            <div class="col-md-8 col-xl-9 ">
+                <div class="card d-none" id="rightContainer">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="foot :: footer"></div>
+    <!--javascript加入后台管理模块-->
+    <script src="../../js/admin/main.js" th:src="@{/js/admin/main.js}"></script>
+
+</body>
+</html>
