@@ -36,7 +36,7 @@
 ![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/index2.png)
 
 *后台管理页
-![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/admins.png)
+![image](https://github.com/GodsTao/spring-boot-blog/blob/master/upload/admins.png)
 
 *个人设置页
 ![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/profile.png)
