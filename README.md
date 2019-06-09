@@ -32,7 +32,7 @@
 
 ## 效果截图
 *主页面
-![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/index1.png)
+![image](https://github.com/GodsTao/spring-boot-blog/blob/master/upload/index1.png)
 ![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/index2.png)
 
 *后台管理页
