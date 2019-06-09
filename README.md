@@ -32,17 +32,17 @@
 
 ## 效果截图
 *主页面
-![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/index1)
-![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/index2)
+![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/index1.png)
+![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/index2.png)
 
 *后台管理页
-![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/admins)
+![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/admins.png)
 
 *个人设置页
-![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/profile)
+![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/profile.png)
 
 *个人空间页
-![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/userspace)
+![image](https://github.com/GodsTao/spring-boot-blog/tree/master/upload/userspace.png)
 
 
 
