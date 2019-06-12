@@ -31,17 +31,17 @@
 
 
 ## 效果截图
-*主页面
+* 主页面
 ![image](https://github.com/GodsTao/spring-boot-blog/blob/master/upload/index1.png)
 ![image](https://github.com/GodsTao/spring-boot-blog/blob/master/upload/index2.png)
 
-*后台管理页
+* 后台管理页
 ![image](https://github.com/GodsTao/spring-boot-blog/blob/master/upload/admins.png)
 
-*个人设置页
+* 个人设置页
 ![image](https://github.com/GodsTao/spring-boot-blog/blob/master/upload/profile.png)
 
-*个人空间页
+* 个人空间页
 ![image](https://github.com/GodsTao/spring-boot-blog/blob/master/upload/userspace.png)
 
 
